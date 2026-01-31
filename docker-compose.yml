@@ -1,0 +1,129 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/Nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      app_net:
+    depends_on:
+      - client
+      - gateway 
+
+  client:
+    build: ./services/client
+    image: docker-vuejs
+    networks:
+      app_net:
+
+  gateway:
+    build: ./services/apigateway
+    networks:
+      app_net:
+    depends_on:
+      - birthdayservice
+      - imageservice
+      - notificationservice
+
+      
+  birthdayservice:
+    build: ./services/birthdayservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgre:5432/birthdayservice_db
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=rmuser
+      - SPRING_RABBITMQ_PASSWORD=rmpassword
+    networks:
+      app_net:
+    depends_on:
+      - postgre
+      - rabbitmq
+
+  imageservice:
+    build: ./services/imageservise
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgre:5432/imageservice_db
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=rmuser
+      - SPRING_RABBITMQ_PASSWORD=rmpassword
+    networks:
+      app_net:
+    depends_on:
+      - postgre
+      - rabbitmq
+
+  notificationservice:
+    build: ./services/notificationservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgre:5432/notificationservice_db
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=rmuser
+      - SPRING_RABBITMQ_PASSWORD=rmpassword
+    networks:
+      app_net:
+    depends_on:
+      - postgre
+      - rabbitmq
+
+  postgre:
+    image: postgres:17
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+      - ./scripts/init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init-multiple-dbs.sql:ro
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+    networks:
+      app_net:
+    
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    networks:
+      app_net:
+    depends_on:
+      - postgre
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    networks:
+      app_net:
+
+
+networks:
+  app_net:
+    ipam:
+      driver: default
+
+
+volumes:
+  postgres_db:
+  notification_db:
+  rabbitmq:

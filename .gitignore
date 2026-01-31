@@ -15,14 +15,12 @@
 **/.yarn
 
 # === Dependencies ===
-**/package-lock.json
 **/yarn.lock
 **/gradle/wrapper/gradle-wrapper.jar
 **/gradle/wrapper/gradle-wrapper.properties
 
 # === Docker ===
 .dockerignore
-**/docker-compose*.yml
 
 # === Environment ===
 .env
