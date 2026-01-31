@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: birthdayservice
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/pozdravliator
+    username: postgres
+    password: iamdeadlytired795795
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: rmuser
+    password: rmpassword
+    virtual-host: /
+    connection-timeout: 5000
+    template:
+      retry:
+        enabled: true
+        max-attempts: 3
+        initial-interval: 2000
+        multiplier: 2.0
+        max-interval: 10000
+      default-requeue-rejected: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+    # Детальные логи Tomcat
+    org.apache.coyote.http11.Http11InputBuffer: DEBUG
+    org.apache.catalina.connector.CoyoteAdapter: DEBUG
+    org.apache.catalina.core.StandardEngine: DEBUG
+
+    # Для видимости raw запроса/ответа
+    org.apache.tomcat.util.net: DEBUG
+    org.apache.tomcat.util.http: DEBUG

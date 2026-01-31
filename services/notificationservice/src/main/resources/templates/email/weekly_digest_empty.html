@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Дайджест дней рождения</title>
+    <style>
+        /* Стили остаются такими же */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            text-align: left;
+            padding: 12px;
+            font-weight: bold;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .age-badge {
+            background-color: #2ecc71;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>📅 Топ ближайших дней рождения</h1>
+    <p>Всего: <span th:text="${friends.size()}">0</span> друзей</p>
+</div>
+
+<!-- Если список пустой -->
+<div th:if="${friends.isEmpty()}" class="empty-state">
+    <h3>🎉 На этой неделе дней рождения нет</h3>
+    <p>Можно отдохнуть!</p>
+</div>
+
+
+
+<div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #7f8c8d;">
+    <p style="font-size: 12px;">Это автоматическое письмо</p>
+</div>
+</body>
+</html>

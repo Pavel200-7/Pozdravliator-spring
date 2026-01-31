@@ -1,0 +1,47 @@
+# === IDE ===
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# === Build Output ===
+**/build/
+**/target/
+**/dist/
+**/.gradle/
+**/node_modules/
+**/.npm
+**/.yarn
+
+# === Dependencies ===
+**/package-lock.json
+**/yarn.lock
+**/gradle/wrapper/gradle-wrapper.jar
+**/gradle/wrapper/gradle-wrapper.properties
+
+# === Docker ===
+.dockerignore
+**/docker-compose*.yml
+
+# === Environment ===
+.env
+.env.local
+.env.*.local
+*.env
+
+# === Logs ===
+*.log
+logs/
+
+# === System ===
+.DS_Store
+Thumbs.db
+
+# === Но НЕ игнорируем важные файлы! ===
+!**/gradlew
+!**/gradlew.bat
+!**/build.gradle
+!**/settings.gradle
+!**/gradle/wrapper/gradle-wrapper.properties
+!**/Dockerfile
